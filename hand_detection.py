@@ -1,7 +1,7 @@
 import cv2
 import mediapipe as mp
 
-class LandmarkCoordinates(object):
+class landmark_coordinates(object):
     def __init__(self,x,y,z):
         self.X = x
         self.Y = y
@@ -9,6 +9,9 @@ class LandmarkCoordinates(object):
 
     def __add__(self,other):
         return [self.X + other.X, self.Y + other.Y, self.Z + other.Z]
+
+    def __mul__(self,other):
+        return self.X * other.X+ self.Y * other.Y+ self.Z * other.Z
 
     def __str__(self):
         return(str(self.X)+", "+str(self.Y)+", "+str(self.Z))
@@ -25,6 +28,10 @@ class LandmarkCoordinates(object):
     def getZ(self):
         return self.Z
 
+class landmark_vector(object):
+    def __init__(self,magnitude,direction):
+        self.Magnitude = magnitude
+        self.Direction = direction
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -64,7 +71,7 @@ with mp_hands.Hands(
         
         for hand_landmarks in results.multi_hand_landmarks:
             for landmark in hand_landmarks.landmark:
-                class_one_image.append(LandmarkCoordinates(landmark.x,landmark.y,landmark.z))
+                class_one_image.append(landmark_coordinates(landmark.x,landmark.y,landmark.z))
         
         wristToThumbBase = [class_one_image[0]+class_one_image[1]]
         wristToIndexBase = [class_one_image[0]+class_one_image[5]]
@@ -74,7 +81,7 @@ with mp_hands.Hands(
         middleBaseToMiddleTip = [class_one_image[9]+class_one_image[12]]
         ringBaseToRingTip = [class_one_image[13]+class_one_image[16]]
         littleBaseToLittleTip = [class_one_image[17]+class_one_image[20]]
-
+    
         # fingercoords = []
         # for i in range (5):
         #     changesx = one_image[0][0]+one_image[i*4+1][0]+one_image[i*4+2][0]+one_image[i*4+3][0]+one_image[i*4+4][0]
