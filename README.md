@@ -24,6 +24,8 @@ bug fix: <br>
 hotfix: <br>
 
     hotfix_name_of_the_hotfix
+    
+## Creating a new branch
 
 For example, if you wanted to add a new feature, you would create a new branch and name it e.g.
 
