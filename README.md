@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# image-processing
-by Lukas Trisauskas, Thomas Nadin-Hepburn, Nicolas Suckling, John Merritt
-=======
 ## Image Processing
 by Lukas Trišauskas, Thomas Nadin-Hepburn, Nicolas Suckling, John Merritt
 
@@ -60,4 +56,3 @@ The naming convention that will be used for naming classes is `CamelCase`, unlik
     class MyClass():
       ...
 
->>>>>>> 4867c6fdcab7c76f8a93aeb1ff0189d14fc83514
