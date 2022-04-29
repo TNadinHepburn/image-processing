@@ -8,7 +8,7 @@ class landmark_coordinates(object):
         self.Z = z
 
     def __add__(self,other):
-        return [self.X + other.X, self.Y + other.Y, self.Z + other.Z]
+        return [self.X + other.getX(), self.Y + other.getY(), self.Z + other.getZ()]
 
     def __mul__(self,other):
         return self.X * other.X+ self.Y * other.Y+ self.Z * other.Z
@@ -38,7 +38,12 @@ mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
 
 # For static images:
-IMAGE_FILES = ["B\\B3.jpg"]
+
+IMAGE_FILES = []
+for i in range(1,3001):
+    IMAGE_FILES.append(f"A\\A{str(i)}.jpg")
+
+
 with mp_hands.Hands(
     static_image_mode=True,
     max_num_hands=1,
@@ -55,10 +60,12 @@ with mp_hands.Hands(
 
         if not results.multi_hand_landmarks:
             continue
+        print(idx)
+
         for hand_landmarks in results.multi_hand_landmarks:
             for landmark in hand_landmarks.landmark:
                 one_image.append([landmark.x,landmark.y,landmark.z])
-        print(one_image)
+        #print(one_image)
         wristToThumbBase = [one_image[0],one_image[1]]
         wristToIndexBase = [one_image[0],one_image[5]]
         wristToLittleBase = [one_image[0],one_image[17]]
@@ -72,7 +79,7 @@ with mp_hands.Hands(
         for hand_landmarks in results.multi_hand_landmarks:
             for landmark in hand_landmarks.landmark:
                 class_one_image.append(landmark_coordinates(landmark.x,landmark.y,landmark.z))
-        
+   
         wristToThumbBase = [class_one_image[0]+class_one_image[1]]
         wristToIndexBase = [class_one_image[0]+class_one_image[5]]
         wristToLittleBase = [class_one_image[0]+class_one_image[17]]
