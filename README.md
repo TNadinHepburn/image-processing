@@ -25,10 +25,6 @@ hotfix: <br>
 
     hotfix_name_of_the_hotfix
     
-Hotfix
-> Refered to as a software patch that is applied to "hot" systems: those which are live, currently running, and in production status, rather than development status.
-> It implies that the change may bave been made quickly and outside normal development and testing processes.
-    
 ## Creating a new branch
 
 For example, if you wanted to add a new feature, you would create a new branch and name it e.g.
