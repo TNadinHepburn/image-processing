@@ -25,11 +25,11 @@ hotfix: <br>
 
     hotfix_name_of_the_hotfix
 
-For example, if you wish to add a new feature, you would create a new branch and name it e.g.
+For example, if you wanted to add a new feature, you would create a new branch and name it e.g.
 
     git checkout -b feature_name_of_the_feature
 
-Another example, if you wanted to add a bug fix, I would create a new branch and name it e.g. [❗] bug fixes can only be pushed once they passed the test.
+Another example, if you wanted to add a bug fix, I would create a new branch and name it e.g.
 
     git checkout -b -bug_name_of_the_bug
 
