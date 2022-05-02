@@ -1,4 +1,4 @@
-import cv2
+import cv2, csv
 import mediapipe as mp
 
 class landmarkCoordinates(object):
@@ -41,17 +41,18 @@ mp_hands = mp.solutions.hands
 EXTRACTED_DATA = []
 labels = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
 
+
 for label in labels:
     IMAGE_FILES = []
-    for i in range(1,3001):
-        IMAGE_FILES.append(f"{label}\\{label}{str(i)}.jpg")
+    IMAGE_FILES.append(f"asl_alphabet_test\\{label}_test.jpg")
+    # try:
 
     with mp_hands.Hands(
         static_image_mode=True,
         max_num_hands=1,
         min_detection_confidence=0.5) as hands:
-
         for idx, file in enumerate(IMAGE_FILES):
+            totalValid = 0
             landmarkCoordinates = []
             # Read an image, flip it around y-axis for correct handedness output (see
             # above).
@@ -60,14 +61,24 @@ for label in labels:
             results = hands.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
 
             if not results.multi_hand_landmarks:
-                continue
+                continue            
+            totalValid += 1 
             for hand_landmarks in results.multi_hand_landmarks:
                 for landmark in hand_landmarks.landmark:
-                    landmarkCoordinates.append([landmark.x,landmark.y,landmark.z])
+                    landmarkCoordinates.append(landmark.x)
+                    landmarkCoordinates.append(landmark.y)
+                    landmarkCoordinates.append(landmark.z)
+            landmarkCoordinates.append(labels.index(file[18]))
             EXTRACTED_DATA.append(landmarkCoordinates)
+            print(f"{idx} COMPLETE {totalValid} PHOTOS")
+    # except:
+    #     print(f"{label} folder not found")
+with open(f'landmark_test_data.csv', 'w') as data_file:
+    writeFile = csv.writer(data_file)
+    for row in EXTRACTED_DATA:
+        #print(row)
+        writeFile.writerow(row)
 
-        with open(f'landmark_data\\{label}.txt', 'a') as data_file:
-            data_file.write(str(EXTRACTED_DATA)+"\n")
 
 
 
