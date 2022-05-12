@@ -67,7 +67,6 @@ for label in labels:
                 for landmark in hand_landmarks.landmark:
                     landmarkCoordinates.append(landmark.x)
                     landmarkCoordinates.append(landmark.y)
-                    landmarkCoordinates.append(landmark.z)
             landmarkCoordinates.append(labels.index(file[18]))
             EXTRACTED_DATA.append(landmarkCoordinates)
             print(f"{idx} COMPLETE {totalValid} PHOTOS")

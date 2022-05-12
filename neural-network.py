@@ -191,17 +191,17 @@ def qwikTest(needTimes):
 	correct = 0
 	total = 0
 	for i in range (20):
-		prediction = predict(network, testdataset[needTimes*50+i])
+		prediction = predict(network, testdataset[needTimes*i+i])
 		print('Expected=%d, Got=%d' % (testdataset[i][-1], prediction))
 		if testdataset[i][-1] == prediction:
 			correct += 1 
 		total += 1
-	print(f"% correct {correct/total}")
+	print(f"% correct {correct/total*100}")
 	return needTimes + 1
 
 seed(1)
 
-filename = 'landmark_data_less_vector_moretest_XY.csv'
+filename = 'landmark_data_less_vector.csv'
 dataset = load_csv(filename)
 for i in range(len(dataset[0])-1):
 	str_column_to_float(dataset, i)
@@ -212,7 +212,7 @@ normalize_dataset(dataset, minmax)
 
 
 
-testfilename = 'landmark_test_data_less_vector_moretest_XY.csv'
+testfilename = 'landmark_test_data_less_vector.csv'
 testdataset = load_csv(testfilename)
 for i in range(len(testdataset[0])-1):
 	str_column_to_float(testdataset, i)
@@ -223,9 +223,10 @@ normalize_dataset(testdataset, minmax)
 
 n_inputs = len(dataset[0]) - 1
 n_outputs = len(set([row[-1] for row in dataset]))
-network = initialize_network(n_inputs, 8, n_outputs)
+network = initialize_network(n_inputs, 12, n_outputs)
 print("starting train")
-train_network(network, dataset, 0.1, 1000, n_outputs)
+train_network(network, dataset, 0.05, 1000, n_outputs)
+
 # for layer in network:
 # 	print(layer)
 # correct = 0
