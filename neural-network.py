@@ -4,8 +4,8 @@ from random import randrange
 from random import random
 from csv import reader
 from math import exp
- 
-errorList = []
+import matplotlib.pyplot as plt 
+
 # Load a CSV file
 def load_csv(filename):
 	dataset = list()
@@ -130,7 +130,6 @@ def backward_propagate_error(network, expected):
 		for j in range(len(layer)):
 			neuron = layer[j]
 			neuron['delta'] = errors[j] * transfer_derivative(neuron['output'])
-		errorList.append(errors)
  
 # Update network weights with error
 def update_weights(network, row, l_rate):
@@ -145,14 +144,20 @@ def update_weights(network, row, l_rate):
  
 # Train a network for a fixed number of epochs
 def train_network(network, train, l_rate, n_epoch, n_outputs):
+	testcount = 0
+	timesFor = 0
 	for epoch in range(n_epoch):
+		if (testcount%25 == 0):
+			timesFor = qwikTest(timesFor)
+		testcount+=1
 		for row in train:
 			outputs = forward_propagate(network, row)
 			expected = [0 for i in range(n_outputs)]
 			expected[row[-1]] = 1
 			backward_propagate_error(network, expected)
-			update_weights(network, row, l_rate)		
-		print('>epoch=%d, lrate=%.3f' % (epoch, l_rate))
+			update_weights(network, row, l_rate)
+		print('>epoch=%d' % (epoch))
+	qwikTest(timesFor)
  
 # Initialize a network
 def initialize_network(n_inputs, n_hidden, n_outputs):
@@ -180,12 +185,24 @@ def back_propagation(train, test, l_rate, n_epoch, n_hidden):
 		predictions.append(prediction)
 	return(predictions)
 
+
+
+def qwikTest(needTimes):
+	correct = 0
+	total = 0
+	for i in range (20):
+		prediction = predict(network, testdataset[needTimes*50+i])
+		print('Expected=%d, Got=%d' % (testdataset[i][-1], prediction))
+		if testdataset[i][-1] == prediction:
+			correct += 1 
+		total += 1
+	print(f"% correct {correct/total}")
+	return needTimes + 1
+
 seed(1)
 
-filename = 'landmark_data_less.csv'
+filename = 'landmark_data_less_vector_moretest_XY.csv'
 dataset = load_csv(filename)
-testfilename = 'landmark_test_data_less.csv'
-testdataset = load_csv(testfilename)
 for i in range(len(dataset[0])-1):
 	str_column_to_float(dataset, i)
 # convert class column to integers
@@ -193,6 +210,10 @@ str_column_to_int(dataset, len(dataset[0])-1)
 minmax = dataset_minmax(dataset)
 normalize_dataset(dataset, minmax)
 
+
+
+testfilename = 'landmark_test_data_less_vector_moretest_XY.csv'
+testdataset = load_csv(testfilename)
 for i in range(len(testdataset[0])-1):
 	str_column_to_float(testdataset, i)
 # convert class column to integers
@@ -200,20 +221,22 @@ str_column_to_int(testdataset, len(testdataset[0])-1)
 minmax = dataset_minmax(testdataset)
 normalize_dataset(testdataset, minmax)
 
-
-# n_inputs = len(dataset[0]) - 1
-# n_outputs = len(set([row[-1] for row in dataset]))
-# network = initialize_network(n_inputs, 10, n_outputs)
-# print("starting train")
-# train_network(network, dataset, 0.05, 50, n_outputs)
-
+n_inputs = len(dataset[0]) - 1
+n_outputs = len(set([row[-1] for row in dataset]))
+network = initialize_network(n_inputs, 8, n_outputs)
+print("starting train")
+train_network(network, dataset, 0.1, 1000, n_outputs)
 # for layer in network:
 # 	print(layer)
-
+# correct = 0
+# total = 0
 # for row in testdataset:
 # 	prediction = predict(network, row)
 # 	print('Expected=%d, Got=%d' % (row[-1], prediction))
-
+# 	if row[-1] == prediction:
+# 		correct += 1 
+# 	total += 1
+# print(f"% correct {correct/total}")
 
 # Test Backprop on Seeds dataset
 # evaluate algorithm
