@@ -15,25 +15,8 @@ from numpy import floor
 import random
 from keras.models import load_model
 
-def plot_three_samples(letter):
-    print("Samples images for letter " + letter)
-    base_path = 'C:\\Users\\Computing\\Desktop\\archivezipped\\archive\\asl_alphabet_train\\'
-    img_path = base_path + letter + '\\**'
-    path_contents = glob(img_path)
-    print(img_path)
 
-    plt.figure(figsize=(16,16))
-    imgs = random.sample(path_contents, 3)
-    plt.subplot(131)
-    plt.imshow(cv2.imread(imgs[0]))
-    plt.subplot(132)
-    plt.imshow(cv2.imread(imgs[1]))
-    plt.subplot(133)
-    plt.imshow(cv2.imread(imgs[2]))
-
-plot_three_samples('A')
-
-data_dir = "C:\\Users\\Computing\\Desktop\\archivezipped\\archive\\asl_alphabet_train\\"
+data_dir = "C:\\Users\\Computing\\Desktop\\asl_alphabet_train\\"
 target_size = (64, 64)
 target_dims = (64, 64, 3) # add channel for RGB
 n_classes = 26
@@ -67,7 +50,7 @@ my_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=["ac
 
 my_model.save('ASL.h5')
 
-testData = data_augmentor.flow_from_directory("C:\\Users\\Computing\\Desktop\\archivezipped\\archive\\asl_alphabet_test\\",target_size=target_size, batch_size=batch_size)
+testData = data_augmentor.flow_from_directory("C:\\Users\\Computing\\Desktop\\asl_alphabet_test\\",target_size=target_size, batch_size=batch_size)
 
 loadedmodel = load_model("..\\image-processing\\ASL.h5")
 predict = loadedmodel.predict(testData)

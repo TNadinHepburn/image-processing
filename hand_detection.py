@@ -51,8 +51,8 @@ for label in labels:
         static_image_mode=True,
         max_num_hands=1,
         min_detection_confidence=0.5) as hands:
+        totalValid = 0
         for idx, file in enumerate(IMAGE_FILES):
-            totalValid = 0
             landmarkCoordinates = []
             # Read an image, flip it around y-axis for correct handedness output (see
             # above).
