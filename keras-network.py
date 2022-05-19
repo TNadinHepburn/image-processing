@@ -30,6 +30,7 @@ data_augmentor = ImageDataGenerator(samplewise_center=True,
 train_generator = data_augmentor.flow_from_directory(data_dir, target_size=target_size, batch_size=batch_size, shuffle=True, subset="training")
 val_generator = data_augmentor.flow_from_directory(data_dir, target_size=target_size, batch_size=batch_size, subset="validation")
 
+
 my_model = Sequential()
 my_model.add(Conv2D(64, kernel_size=4, strides=1, activation='relu', input_shape=target_dims))
 my_model.add(Conv2D(64, kernel_size=4, strides=2, activation='relu'))
