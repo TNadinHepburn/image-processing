@@ -1,26 +1,102 @@
+# Backprop on the Seeds Dataset
 from random import seed
+from random import randrange
 from random import random
+from csv import reader
 from math import exp
-# Initialize a network
-def initialize_network(n_inputs, n_hidden, n_hidden2, n_outputs):
-	network = list()
-	hidden_layer = [{'weights':[random() for i in range(n_inputs + 1)]} for i in range(n_hidden)]
-	network.append(hidden_layer)
-	hidden_layer2 = [{'weights':[random() for i in range(n_hidden + 1)]} for i in range(n_hidden2)]
-	network.append(hidden_layer2)
-	output_layer = [{'weights':[random() for i in range(n_hidden2 + 1)]} for i in range(n_outputs)]
-	network.append(output_layer)
-	return network
+import matplotlib.pyplot as plt 
 
+# Load a CSV file
+def load_csv(filename):
+	dataset = list()
+	with open(filename, 'r') as file:
+		csv_reader = reader(file)
+		for row in csv_reader:
+			if not row:
+				continue
+			dataset.append(row)
+	return dataset
+ 
+# Convert string column to float
+def str_column_to_float(dataset, column):
+	for row in dataset:
+		row[column] = float(row[column].strip())
+ 
+# Convert string column to integer
+def str_column_to_int(dataset, column):
+	class_values = [row[column] for row in dataset]
+	unique = set(class_values)
+	lookup = dict()
+	for i, value in enumerate(unique):
+		lookup[value] = i
+	for row in dataset:
+		row[column] = lookup[row[column]]
+	return lookup
+ 
+# Find the min and max values for each column
+def dataset_minmax(dataset):
+	minmax = list()
+	stats = [[min(column), max(column)] for column in zip(*dataset)]
+	return stats
+ 
+# Rescale dataset columns to the range 0-1
+def normalize_dataset(dataset, minmax):
+	for row in dataset:
+		for i in range(len(row)-1):
+			row[i] = (row[i] - minmax[i][0]) / (minmax[i][1] - minmax[i][0])
+ 
+# Split a dataset into k folds
+def cross_validation_split(dataset, n_folds):
+	dataset_split = list()
+	dataset_copy = list(dataset)
+	fold_size = int(len(dataset) / n_folds)
+	for i in range(n_folds):
+		fold = list()
+		while len(fold) < fold_size:
+			index = randrange(len(dataset_copy))
+			fold.append(dataset_copy.pop(index))
+		dataset_split.append(fold)
+	return dataset_split
+ 
+# Calculate accuracy percentage
+def accuracy_metric(actual, predicted):
+	correct = 0
+	for i in range(len(actual)):
+		if actual[i] == predicted[i]:
+			correct += 1
+	return correct / float(len(actual)) * 100.0
+ 
+# Evaluate an algorithm using a cross validation split
+def evaluate_algorithm(dataset, algorithm, n_folds, *args):
+	folds = cross_validation_split(dataset, n_folds)
+	scores = list()
+	for fold in folds:
+		train_set = list(folds)
+		train_set.remove(fold)
+		train_set = sum(train_set, [])
+		test_set = list()
+		for row in fold:
+			row_copy = list(row)
+			test_set.append(row_copy)
+			row_copy[-1] = None
+		predicted = algorithm(train_set, test_set, *args)
+		actual = [row[-1] for row in fold]
+		accuracy = accuracy_metric(actual, predicted)
+		scores.append(accuracy)
+	return scores
+ 
+# Calculate neuron activation for an input
 def activate(weights, inputs):
 	activation = weights[-1]
 	for i in range(len(weights)-1):
 		activation += weights[i] * inputs[i]
 	return activation
-
+ 
+# Transfer neuron activation
 def transfer(activation):
 	return 1.0 / (1.0 + exp(-activation))
-
+ 
+# Forward propagate input to a network output
 def forward_propagate(network, row):
 	inputs = row
 	for layer in network:
@@ -31,10 +107,12 @@ def forward_propagate(network, row):
 			new_inputs.append(neuron['output'])
 		inputs = new_inputs
 	return inputs
-
+ 
+# Calculate the derivative of an neuron output
 def transfer_derivative(output):
 	return output * (1.0 - output)
-
+ 
+# Backpropagate error and store in neurons
 def backward_propagate_error(network, expected):
 	for i in reversed(range(len(network))):
 		layer = network[i]
@@ -52,8 +130,8 @@ def backward_propagate_error(network, expected):
 		for j in range(len(layer)):
 			neuron = layer[j]
 			neuron['delta'] = errors[j] * transfer_derivative(neuron['output'])
-
-
+ 
+# Update network weights with error
 def update_weights(network, row, l_rate):
 	for i in range(len(network)):
 		inputs = row[:-1]
@@ -63,45 +141,110 @@ def update_weights(network, row, l_rate):
 			for j in range(len(inputs)):
 				neuron['weights'][j] -= l_rate * neuron['delta'] * inputs[j]
 			neuron['weights'][-1] -= l_rate * neuron['delta']
-
+ 
+# Train a network for a fixed number of epochs
 def train_network(network, train, l_rate, n_epoch, n_outputs):
+	testcount = 0
+	timesFor = 0
 	for epoch in range(n_epoch):
-		sum_error = 0
+		if (testcount%25 == 0):
+			timesFor = qwikTest(timesFor)
+		testcount+=1
 		for row in train:
 			outputs = forward_propagate(network, row)
 			expected = [0 for i in range(n_outputs)]
 			expected[row[-1]] = 1
-			sum_error += sum([(expected[i]-outputs[i])**2 for i in range(len(expected))])
 			backward_propagate_error(network, expected)
 			update_weights(network, row, l_rate)
-		print('>epoch=%d, lrate=%.3f, error=%.3f' % (epoch, l_rate, sum_error))
+		print('>epoch=%d' % (epoch))
+	qwikTest(timesFor)
+ 
+# Initialize a network
+def initialize_network(n_inputs, n_hidden, n_outputs):
+	network = list()
+	hidden_layer = [{'weights':[random() for i in range(n_inputs + 1)]} for i in range(n_hidden)]
+	network.append(hidden_layer)
+	output_layer = [{'weights':[random() for i in range(n_hidden + 1)]} for i in range(n_outputs)]
+	network.append(output_layer)
+	return network
+ 
+# Make a prediction with a network
+def predict(network, row):
+	outputs = forward_propagate(network, row)
+	return outputs.index(max(outputs))
+ 
+# Backpropagation Algorithm With Stochastic Gradient Descent
+def back_propagation(train, test, l_rate, n_epoch, n_hidden):
+	n_inputs = len(train[0]) - 1
+	n_outputs = len(set([row[-1] for row in train]))
+	network = initialize_network(n_inputs, n_hidden, n_outputs)
+	train_network(network, train, l_rate, n_epoch, n_outputs)
+	predictions = list()
+	for row in test:
+		prediction = predict(network, row)
+		predictions.append(prediction)
+	return(predictions)
 
+
+
+def qwikTest(needTimes):
+	correct = 0
+	total = 0
+	for i in range (20):
+		prediction = predict(network, testdataset[needTimes*i+i])
+		print('Expected=%d, Got=%d' % (testdataset[i][-1], prediction))
+		if testdataset[i][-1] == prediction:
+			correct += 1 
+		total += 1
+	print(f"% correct {correct/total*100}")
+	return needTimes + 1
 
 seed(1)
-network = initialize_network(63,21,5,1)
-data = [0.46226274967193604, 0.9314163327217102, 5.156756515134475e-07, 0.32102906703948975, 0.8690335750579834, -0.07793261855840683, 0.24366290867328644, 0.7515475153923035, -0.11654634773731232, 0.2979912757873535, 0.6468672752380371, -0.14985805749893188, 0.39187464118003845, 0.623251736164093, -0.1791105419397354, 0.32519495487213135, 0.5505350232124329, -0.029445800930261612, 0.325386106967926, 0.4003191888332367, -0.06686026602983475, 0.33738353848457336, 0.3117583990097046, -0.10946670919656754, 0.35294440388679504, 0.23573267459869385, -0.14561727643013, 0.40735289454460144, 0.5388861298561096, -0.02627790905535221, 0.40598493814468384, 0.3707590699195862, -0.05778143182396889, 0.4149753451347351, 0.26960375905036926, -0.09782474488019943, 0.42631837725639343, 0.18573495745658875, -0.13045066595077515, 0.4770398736000061, 0.5552796721458435, -0.03574608266353607, 0.4818314015865326, 0.39628124237060547, -0.06673657149076462, 0.48592931032180786, 0.29939866065979004, -0.1007314920425415, 0.49119555950164795, 0.22285771369934082, -0.12700650095939636, 0.5550819039344788, 0.601193368434906, -0.054694127291440964, 0.5563027262687683, 0.47325441241264343, -0.08398215472698212, 0.5544518828392029, 0.393740177154541, -0.10495159775018692, 0.5554479360580444, 0.32560425996780396, -0.1217215284705162, None]
-expected = [1,0]
-output = forward_propagate(network,data)
-print(output)
-backward_propagate_error(output,expected)
-#print(network[0])
 
-seed(1)
-dataset = [[0.46226274967193604, 0.9314163327217102, 5.156756515134475e-07, 0.32102906703948975, 0.8690335750579834, -0.07793261855840683, 0.24366290867328644, 0.7515475153923035, -0.11654634773731232, 0.2979912757873535, 0.6468672752380371, -0.14985805749893188, 0.39187464118003845, 0.623251736164093, -0.1791105419397354, 0.32519495487213135, 0.5505350232124329, -0.029445800930261612, 0.325386106967926, 0.4003191888332367, -0.06686026602983475, 0.33738353848457336, 0.3117583990097046, -0.10946670919656754, 0.35294440388679504, 0.23573267459869385, -0.14561727643013, 0.40735289454460144, 0.5388861298561096, -0.02627790905535221, 0.40598493814468384, 0.3707590699195862, -0.05778143182396889, 0.4149753451347351, 0.26960375905036926, -0.09782474488019943, 0.42631837725639343, 0.18573495745658875, -0.13045066595077515, 0.4770398736000061, 0.5552796721458435, -0.03574608266353607, 0.4818314015865326, 0.39628124237060547, -0.06673657149076462, 0.48592931032180786, 0.29939866065979004, -0.1007314920425415, 0.49119555950164795, 0.22285771369934082, -0.12700650095939636, 0.5550819039344788, 0.601193368434906, -0.054694127291440964, 0.5563027262687683, 0.47325441241264343, -0.08398215472698212, 0.5544518828392029, 0.393740177154541, -0.10495159775018692, 0.5554479360580444, 0.32560425996780396, -0.1217215284705162, 1]]
+filename = 'landmark_data_less_vector.csv'
+dataset = load_csv(filename)
+for i in range(len(dataset[0])-1):
+	str_column_to_float(dataset, i)
+# convert class column to integers
+str_column_to_int(dataset, len(dataset[0])-1)
+minmax = dataset_minmax(dataset)
+normalize_dataset(dataset, minmax)
+
+
+
+testfilename = 'landmark_test_data_less_vector.csv'
+testdataset = load_csv(testfilename)
+for i in range(len(testdataset[0])-1):
+	str_column_to_float(testdataset, i)
+# convert class column to integers
+str_column_to_int(testdataset, len(testdataset[0])-1)
+minmax = dataset_minmax(testdataset)
+normalize_dataset(testdataset, minmax)
+
 n_inputs = len(dataset[0]) - 1
 n_outputs = len(set([row[-1] for row in dataset]))
-network = initialize_network(n_inputs, 21, 5, n_outputs)
-train_network(network, dataset, 0.5, 20, n_outputs)
-for layer in network:
-	print(layer)
+network = initialize_network(n_inputs, 12, n_outputs)
+print("starting train")
+train_network(network, dataset, 0.05, 1000, n_outputs)
 
+# for layer in network:
+# 	print(layer)
+# correct = 0
+# total = 0
+# for row in testdataset:
+# 	prediction = predict(network, row)
+# 	print('Expected=%d, Got=%d' % (row[-1], prediction))
+# 	if row[-1] == prediction:
+# 		correct += 1 
+# 	total += 1
+# print(f"% correct {correct/total}")
 
-class neural_network(object):
-    def __init__(self, n_inputs=63, n_hidden=21, n_hidden2=5, n_outputs=1):
-        self.network = list()
-        hidden_layer = [{'weights':[random() for i in range(n_inputs + 1)]} for i in range(n_hidden)]
-        self.network.append(hidden_layer)
-        hidden_layer2 = [{'weights':[random() for i in range(n_hidden + 1)]} for i in range(n_hidden2)]
-        self.network.append(hidden_layer2)
-        output_layer = [{'weights':[random() for i in range(n_hidden2 + 1)]} for i in range(n_outputs)]
-        self.network.append(output_layer)
+# Test Backprop on Seeds dataset
+# evaluate algorithm
+# n_folds = 2
+# l_rate = 0.3
+# n_epoch = 50
+# n_hidden = 10
+# scores = evaluate_algorithm(dataset, back_propagation, n_folds, l_rate, n_epoch, n_hidden)
+# print('Scores: %s' % scores)
+# print('Mean Accuracy: %.3f%%' % (sum(scores)/float(len(scores))))
