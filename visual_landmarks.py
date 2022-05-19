@@ -5,6 +5,8 @@
 # mpHands = mp.solutions.hands
 # hands = mpHands.Hands()
 # mpDraw = mp.solutions.drawing_utils
+
+# # For video inputs
 # while True:
 #     sucess, image = cap.read()
 #     imageRGB = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
