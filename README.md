@@ -3,12 +3,14 @@ by Lukas Trišauskas, Thomas Nadin-Hepburn, Nicolas Suckling, John Merritt
 
 ## Workflow
 
+![GitHub Workflow-2](https://user-images.githubusercontent.com/76224796/169609435-22884b41-388a-46fc-9ec3-0a9a18fa8b1a.png)
+
 [❗] The image-processing repository consists of three branches
 
 - Main: also known as the production branch, it contains live, working version of the app, you can only merge to it after a code review has been completed and no more changes need to be made.
 - Development: the default branch with the latest features and bug fixes that haven't been merged to production yet.
 - Test: contains unit tests for all features, before any changes are merged to production, it must undergo testing.
-
+- 
 ## Temporary Branches
 
 [❗] When adding a new feature, trying to fix a bug, or adding a hotfix, always create a new branch and use the following naming conventions for branch names<br>
