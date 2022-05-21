@@ -39,7 +39,7 @@ Another example, if you wanted to add a bug fix, I would create a new branch and
 
 
 ## Semantic Versioning
-![Blank diagram-3](https://user-images.githubusercontent.com/76224796/169652790-f6afa255-8a69-4800-9e18-2ed78e18dec6.png)
+![Blank diagram-3](https://user-images.githubusercontent.com/76224796/169652814-14ec8ad9-233a-4b49-bbad-93afaebbeca6.png)
 
 Major refers to when a working version of the app is released. Increment once develop branch has been merged with main branch. 
 
