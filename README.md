@@ -38,6 +38,15 @@ Another example, if you wanted to add a bug fix, I would create a new branch and
     git checkout -b -bug_name_of_the_bug
 
 
+## Semantic Versioning
+![Blank diagram-3](https://user-images.githubusercontent.com/76224796/169652790-f6afa255-8a69-4800-9e18-2ed78e18dec6.png)
+
+Major refers to when a working version of the app is released. Increment once develop branch has been merged with main branch. 
+
+Minor refers to when new functionality or improvements have been introduced. Increment only when adding a new feature or making improvements to existing code. Patch is reset to 0 when minor version is incremented.
+
+Patch refers to when bug fixes are introduced (a bug fix is defined as an internal change that fixes incorrect behaviour). Increment only when merging bug fix with main branch.
+
 ## Standards
 
 ### Variables<br>
