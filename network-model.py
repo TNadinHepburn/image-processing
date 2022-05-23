@@ -1,4 +1,3 @@
-import matplotlib
 import tensorflow as tf
 from tensorflow import keras
 from keras.models import Sequential
@@ -16,26 +15,26 @@ import os, shutil, random, glob, matplotlib.pyplot as plt, numpy as np
 labels = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
 validation_percent = 0.1
 batch_size = 50
-target_size = (128, 128)
-target_dims = (128, 128, 3) # add channel for RGB
+target_size = (96, 96)
+target_dims = (96, 96, 3) # add channel for RGB
 n_classes = 26
 epoch = 10
-data_dir = 'D:/asl_alphabet_train'
+data_dir = 'asl_alphabet_train'
 test_data_dir = 'asl_alphabet_test'
 data_augmentor = ImageDataGenerator(samplewise_center=True, 
                                     samplewise_std_normalization=True, 
                                     validation_split=validation_percent)
 
-physical_devices = tf.config.experimental.list_physical_devices('GPU')
-print(len(physical_devices))
-if len(physical_devices):
-    tf.config.experimental.set_memory_growth(physical_devices[0],True)
-    print("using GPU"+ physical_devices[0] + "to train")
-else:
-    print("using CPU to train")
+# physical_devices = tf.config.experimental.list_physical_devices('GPU')
+# print(len(physical_devices))
+# if len(physical_devices):
+#     tf.config.experimental.set_memory_growth(physical_devices[0],True)
+#     print("using GPU"+ str(physical_devices[0]) + "to train")
+# else:
+#     print("using CPU to train")
 
 def plotImages(images):
-    fig, axes = plt.subplots(8,8,figsize=(128,128))
+    fig, axes = plt.subplots(8,8,figsize=(96,96))
     axes = axes.flatten()
     for img, ax in zip(images, axes):
         ax.imshow(img)
