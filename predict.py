@@ -35,7 +35,7 @@ def plotImages(images,result="Title"):
     #plt.tight_layout()
     plt.show()
 
-def testImages(ASL_model):
+def predictTestImages(ASL_model):
     test_data_dir = 'asl_alphabet_test'
     img_for_pred = ImageDataGenerator(preprocessing_function=tf.keras.applications.vgg16.preprocess_input).flow_from_directory(directory=test_data_dir, target_size=target_size, batch_size=1, shuffle=False)
     predictions = ASL_model.predict(img_for_pred, verbose=0)
@@ -60,4 +60,4 @@ def testImages(ASL_model):
     plotImages(pre_images,all_labels)
 
 my_model = loadModel()
-testImages(my_model)
+predictTestImages(my_model)
