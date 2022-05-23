@@ -28,7 +28,11 @@ data_augmentor = ImageDataGenerator(samplewise_center=True,
 
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
 print(len(physical_devices))
-tf.config.experimental.set_memory_growth(physical_devices[0],True)
+if len(physical_devices):
+    tf.config.experimental.set_memory_growth(physical_devices[0],True)
+    print("using GPU"+ physical_devices[0] + "to train")
+else:
+    print("using CPU to train")
 
 def plotImages(images):
     fig, axes = plt.subplots(8,8,figsize=(128,128))
