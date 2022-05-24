@@ -34,10 +34,12 @@ def fileImages(model):
     filepath = ""
     while not isdir(filepath):
         filepath = input("Enter the filepath of the image(s): ")
-    predictFileImage(model,filepath)
+    img, outputs = predictFileImage(model,filepath)
+    plotImages(img, outputs)
 
     
 def webcamImages():
+    print("Sorry this has not been implemented yet.\nPlease try another option!")
     return
     
 

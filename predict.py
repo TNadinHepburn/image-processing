@@ -19,7 +19,8 @@ def plotImages(images,result):
         subplot_size_x = 5
     else: 
         subplot_size_y = subplot_size_x
-
+    if subplot_size_y == 1 and subplot_size_x == 1:
+        subplot_size_x +=1
     fig, axes = plt.subplots(subplot_size_x,subplot_size_y,figsize=(64,64))
     axes = axes.flatten()
     count = 0
@@ -66,4 +67,4 @@ def predictFileImage(ASL_model, filepath):
         all_labels.append(labels[result])
         print(img_for_pred[count][1])
         count += 1
-    plotImages(pre_images,all_labels)
+    return pre_images,all_labels
