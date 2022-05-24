@@ -60,11 +60,8 @@ def predictFileImage(ASL_model, filepath):
     pre_images = []
     for img in glob.glob(data_dir + "/*/*.jpg"):
         pre_images.append(mpimg.imread(img))
-    print("preimages "+ str(len(pre_images)))
     all_labels = []
     for result in np.argmax(predictions, axis=-1):
-        print(labels[result])
         all_labels.append(labels[result])
-        print(img_for_pred[count][1])
         count += 1
     return pre_images,all_labels

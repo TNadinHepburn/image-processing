@@ -14,7 +14,7 @@ n_classes = 26
 epoch = 10
 validation_percent = 0.1
 
-data_dir = 'D:/asl_alphabet_train'
+data_dir = 'asl_alphabet_train'
 test_data_dir = 'asl_alphabet_test'
 
 data_generator = ImageDataGenerator(samplewise_center=True, samplewise_std_normalization=True, validation_split=validation_percent)

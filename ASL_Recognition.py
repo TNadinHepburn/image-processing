@@ -7,7 +7,7 @@ from os import environ
 environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
-def program(model):
+def main(model):
     option = "0"
     while option == "1" or option == "2" or option == "3" or option == "0":
         print("Select option\n 1 Test Images   2 From Filepath   3 From Webcam   0 Quit")
@@ -37,20 +37,23 @@ def fileImages(model):
     img, outputs = predictFileImage(model,filepath)
     plotImages(img, outputs)
 
-    
 def webcamImages():
     print("Sorry this has not been implemented yet.\nPlease try another option!")
     return
     
-
 if __name__ == "__main__":
-    print(isfile('asl_model.h5'))
+    train_now = ""
     if isfile('./asl_model.h5'):
-        print("loading model")
-        my_model = loadModel()
+        train_now = input("A model has been pre-trained do you want to continue with this?\nY - to use pretrained model (default)\nN - Retrain model now\n-->")
+        if trainModel == "N":
+            my_model = createModel()
+            trainModel(my_model)
+            saveModel(my_model)
+        else:
+            my_model = loadModel()
     else:
         my_model = createModel()
         trainModel(my_model)
         saveModel(my_model)
-    program(my_model)
+    main(my_model)
     
