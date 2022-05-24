@@ -44,7 +44,6 @@ def webcamImages():
     
 
 if __name__ == "__main__":
-    print("Main")
     print(isfile('asl_model.h5'))
     if isfile('./asl_model.h5'):
         print("loading model")
@@ -54,5 +53,4 @@ if __name__ == "__main__":
         trainModel(my_model)
         saveModel(my_model)
     program(my_model)
-else:
-   print("File one executed when imported")
+    
