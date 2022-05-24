@@ -19,21 +19,19 @@ def plotImages(images,result):
         subplot_size_x = 5
     else: 
         subplot_size_y = subplot_size_x
-    if subplot_size_x == 1 and subplot_size_y == 1:
-        plt.imshow(images[0])
-    else:
-        fig, axes = plt.subplots(subplot_size_x,subplot_size_y,figsize=(64,64))
-        axes = axes.flatten()
-        count = 0
-        for img, ax in zip(images, axes):
-            ax.imshow(img)
-            if isinstance(result,list):
-                ax.set_title(result[count])
-                count +=1
-            else:
-                ax.set_title(result)
-        for ax in axes:
-            ax.axis('off')
+
+    fig, axes = plt.subplots(subplot_size_x,subplot_size_y,figsize=(64,64))
+    axes = axes.flatten()
+    count = 0
+    for img, ax in zip(images, axes):
+        ax.imshow(img)
+        if isinstance(result,list):
+            ax.set_title(result[count])
+            count +=1
+        else:
+            ax.set_title(result)
+    for ax in axes:
+        ax.axis('off')
         
     plt.show()
 

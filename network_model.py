@@ -6,7 +6,7 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import Adam
 from keras.metrics import categorical_crossentropy
 
-import glob, itertools, os, random, shutil
+import glob, random, shutil
 
 labels = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
 validation_percent = 0.1

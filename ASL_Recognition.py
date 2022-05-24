@@ -1,18 +1,19 @@
 from network_model import *
 from predict import *
 from os.path import isfile,isdir 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+from os import environ  
+environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 def program(model):
     option = "0"
     while option == "1" or option == "2" or option == "3" or option == "0":
-        print("Select option\n 1, Test Images   2, From Filepath   3, From Webcam   0, Quit")
+        print("Select option\n 1 Test Images   2 From Filepath   3 From Webcam   0 Quit")
         option = input("-->")
         if option not in ["1","2","3","0"]:
             print("Invalid Choice")
             continue
         else:
-            if option == "4":
+            if option == "0":
                 break
             elif option == "1":
                 testImages(model)
@@ -24,7 +25,7 @@ def program(model):
 def testImages(model):
     img, outputs = predictTestImages(model)
     plotImages(img,outputs)
-    
+
 def fileImages(model):
     filepath = ""
     while not isdir(filepath):
