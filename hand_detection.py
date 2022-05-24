@@ -1,40 +1,42 @@
 import cv2
 import mediapipe as mp
 
+
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
 
 # For static images:
-IMAGE_FILES = ["archive\\asl_alphabet_train\\asl_alphabet_train\\B\\B3.jpg"]
-with mp_hands.Hands(
-    static_image_mode=True,
-    max_num_hands=1,
-    min_detection_confidence=0.5) as hands:
+EXTRACTED_DATA = []
+labels = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
 
-    for idx, file in enumerate(IMAGE_FILES):
-        one_image = []
-        # Read an image, flip it around y-axis for correct handedness output (see
-        # above).
-        image = cv2.flip(cv2.imread(file), 1)
-        # Convert the BGR image to RGB before processing.
-        results = hands.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+for label in labels:
+    IMAGE_FILES = []
+    for i in range(1,3001):
+        IMAGE_FILES.append(f"{label}\\{label}{str(i)}.jpg")
 
-        if not results.multi_hand_landmarks:
-            continue
-        for hand_landmarks in results.multi_hand_landmarks:
-            for landmark in hand_landmarks.landmark:
-                one_image.append([landmark.x,landmark.y,landmark.z])
-        print(one_image)
-        fingercoords = []
-        for i in range (5):
-            changesx = one_image[0][0]+one_image[i*4+1][0]+one_image[i*4+2][0]+one_image[i*4+3][0]+one_image[i*4+4][0]
-            changesy = one_image[0][1]+one_image[i*4+1][1]+one_image[i*4+2][1]+one_image[i*4+3][1]+one_image[i*4+4][1]
-            changesz = one_image[0][2]+one_image[i*4+1][2]+one_image[i*4+2][2]+one_image[i*4+3][2]+one_image[i*4+4][2]
-            fingercoords.append([changesx,changesy,changesz])
-        print(fingercoords)
+    with mp_hands.Hands(
+        static_image_mode=True,
+        max_num_hands=1,
+        min_detection_confidence=0.5) as hands:
 
+        for idx, file in enumerate(IMAGE_FILES):
+            landmarkCoordinates = []
+            # Read an image, flip it around y-axis for correct handedness output (see
+            # above).
+            image = cv2.flip(cv2.imread(file), 1)
+            # Convert the BGR image to RGB before processing.
+            results = hands.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
 
+            if not results.multi_hand_landmarks:
+                continue
+            for hand_landmarks in results.multi_hand_landmarks:
+                for landmark in hand_landmarks.landmark:
+                    landmarkCoordinates.append([landmark.x,landmark.y,landmark.z])
+            EXTRACTED_DATA.append(landmarkCoordinates)
+
+        with open(f'landmark_data\\{label}.txt', 'a') as data_file:
+            data_file.write(str(EXTRACTED_DATA)+"\n")
 
 
 
