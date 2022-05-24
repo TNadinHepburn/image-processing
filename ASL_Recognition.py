@@ -1,8 +1,11 @@
+#import functions from other main files
 from network_model import *
 from predict import *
 from os.path import isfile,isdir 
 from os import environ  
+# fix for tensorflow bug where cant find .dll file 
 environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 
 def program(model):
     option = "0"
@@ -14,6 +17,7 @@ def program(model):
             continue
         else:
             if option == "0":
+                print("EXITING PROGRAM\nthank you for using our Sign Language Recognition System!")
                 break
             elif option == "1":
                 testImages(model)
@@ -47,8 +51,6 @@ if __name__ == "__main__":
         my_model = createModel()
         trainModel(my_model)
         saveModel(my_model)
-    print("runing program")
     program(my_model)
-    print("finished program")
 else:
    print("File one executed when imported")
