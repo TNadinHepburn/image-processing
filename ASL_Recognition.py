@@ -27,14 +27,14 @@ def main(model):
                 webcamImages(model)
 
 def testImages(model):
-    img, outputs = predictTestImages(model)
+    img, outputs = predictImage(model)
     plotImages(img,outputs)
 
 def fileImages(model):
     filepath = ""
     while not isdir(filepath):
         filepath = input("Enter the filepath of the image(s): ")
-    img, outputs = predictFileImage(model,filepath)
+    img, outputs = predictImage(model,filepath)
     plotImages(img, outputs)
 
 def webcamImages():

@@ -33,7 +33,6 @@ def plotImages(images,result):
             ax.set_title(result)
     for ax in axes:
         ax.axis('off')
-        
     plt.show()
 
 def predictTestImages(ASL_model):
