@@ -1,11 +1,5 @@
-from argparse import FileType
-from ast import Delete
-from cgitb import text
-from enum import auto
 import tkinter as tk
-from tkinter import CENTER, END, INSERT, TOP, ttk
 from tkinter import filedialog
-from turtle import color
 import cv2
 from PIL import Image, ImageTk
 
