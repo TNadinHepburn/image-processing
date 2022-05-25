@@ -6,10 +6,22 @@ from PIL import Image, ImageTk
 
 # this is where the predicted letter should be stored
 predicted = 'N/A'
+# TODO: add call back function for taking a screenshot from the webcam
+screenshot_path = ''
+
 
 # button commands
+ # when test button is pressed this function will execute
 def test():
-    # when test button is pressed this function will execute
+    # check if file path has been selected and screenshot hasn't been taken
+    if len(browse) != 0 and len(screenshot_path) == 0:
+        # execute back propagation
+        # path to test image -> browse()
+    elif len(browse) == 0 and len(screenshot_path) != 0:
+        # execute back propagation
+        # path to test image -> screenshot_path
+        
+    
     print('Test')
 def screenshot():
     # when screenshot button is pressed this function will execute
@@ -66,6 +78,7 @@ def browse():
     path = filedialog.askopenfilename(initialdir='/', title='select an image', filetypes=(('image', '*.jpg'),('all', '*.*')))
     path_entry.delete(0, END)
     path_entry.insert(INSERT, path)
+    test_btn['state'] = NORMAL
     return path
 
 # initializing buttons
