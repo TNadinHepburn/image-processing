@@ -1,30 +1,42 @@
+from predict import *
+from json import load
 import tkinter as tk
-from tkinter import ttk
+from tkinter import NW, ttk
 from tkinter import filedialog
 import cv2
 from PIL import Image, ImageTk
-
+from os import environ, listdir
+environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # this is where the predicted letter should be stored
 predicted = 'N/A'
 # TODO: add call back function for taking a screenshot from the webcam
 screenshot_path = ''
-
-
+# for selecting an image, returns file path
+def browse():
+    path = filedialog.askopenfilename(initialdir='/', title='select an image', filetypes=(('image', '*.jpg'),('all', '*.*')))
+    path_entry.delete(0, tk.END)
+    path_entry.insert(tk.INSERT, path)
+    model = loadModel()
+    folder_path = path.rsplit('/',2)[0]
+    img, predicted = predictImage(model,folder_path)
+    all_image_path = []
+    for img in listdir(path.rsplit('/',1)[0]):
+        all_image_path.append(img)
+    predict_index = all_image_path.index(path.rsplit('/',1)[-1])
+    output_box.config(text=predicted[predict_index])
+    image = Image.open(path)
+    resized = image.resize((400,300),Image.ANTIALIAS)
+    img = ImageTk.PhotoImage(resized)
+    webcam.img =img
+    webcam.create_image(0,0,anchor=NW, image = img)
+    
 # button commands
  # when test button is pressed this function will execute
 def test():
-    # check if file path has been selected and screenshot hasn't been taken
-    if len(browse) != 0 and len(screenshot_path) == 0:
-        # execute back propagation
-        # path to test image -> browse()
-        pass
-    elif len(browse) == 0 and len(screenshot_path) != 0:
-        # execute back propagation
-        # path to test image -> screenshot_path
-        pass  
-    
     print('Test')
+
+
 def screenshot():
     # when screenshot button is pressed this function will execute
     print('Webcam')
@@ -75,13 +87,8 @@ output_label.grid(column=0, row=0)
 # customizing output box
 output_box.config(state=tk.DISABLED, relief='solid', font=('Calibri',40), justify=tk.CENTER, padding=50, background='light yellow')
 
-# for selecting an image, returns file path
-def browse():
-    path = filedialog.askopenfilename(initialdir='/', title='select an image', filetypes=(('image', '*.jpg'),('all', '*.*')))
-    path_entry.delete(0, END)
-    path_entry.insert(INSERT, path)
-    test_btn['state'] = NORMAL
-    return path
+
+    
 
 # initializing buttons
 test_btn = ttk.Button(output_frame, width=30, text='Test', command=test, state=tk.DISABLED)

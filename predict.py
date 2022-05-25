@@ -54,8 +54,10 @@ def predictImage(ASL_model, filepath='asl_alphabet_test'):
     np.round(predictions)
     count = 0
     pre_images = []
+    all_img_path = []
     for img in glob.glob(data_dir + "/*/*.jpg"):
         pre_images.append(mpimg.imread(img))
+        all_img_path.append(img)
     all_labels = []
     for result in np.argmax(predictions, axis=-1):
         all_labels.append(labels[result])
