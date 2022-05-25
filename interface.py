@@ -78,6 +78,7 @@ def browse():
     path = filedialog.askopenfilename(initialdir='/', title='select an image', filetypes=(('image', '*.jpg'),('all', '*.*')))
     path_entry.delete(0, END)
     path_entry.insert(INSERT, path)
+    test_btn['state'] = NORMAL
     return path
 
 # initializing buttons
