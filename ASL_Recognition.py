@@ -7,7 +7,7 @@ from os import environ
 environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
-def main(model):
+def main(model): 
     option = "0"
     while option == "1" or option == "2" or option == "3" or option == "0":
         print("Select option\n 1 Test Images   2 From Filepath   3 From Webcam   0 Quit")
