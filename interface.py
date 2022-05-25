@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from tkinter import filedialog
 import cv2
 from PIL import Image, ImageTk
@@ -17,10 +18,11 @@ def test():
     if len(browse) != 0 and len(screenshot_path) == 0:
         # execute back propagation
         # path to test image -> browse()
+        pass
     elif len(browse) == 0 and len(screenshot_path) != 0:
         # execute back propagation
         # path to test image -> screenshot_path
-        
+        pass  
     
     print('Test')
 def screenshot():
@@ -63,7 +65,7 @@ output_frame = ttk.Frame(window, width=200, height=200)
 output_frame.grid(column=1, row=0, columnspan=1, rowspan=4, padx=5)
 
 # initializing output_box and output_label
-output_box = ttk.Label(output_frame, text=f'{predicted}', justify=CENTER)
+output_box = ttk.Label(output_frame, text=f'{predicted}', justify=tk.CENTER)
 output_label = ttk.Label(output_frame, text='Predicted Letter')
 
 # positioning output_box and output_label on the grid
