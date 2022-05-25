@@ -31,10 +31,10 @@ def browse():
     webcam.img =img
     webcam.create_image(0,0,anchor=NW, image = img)
     
-# button commands
- # when test button is pressed this function will execute
-def test():
-    print('Test')
+# # button commands
+#  # when test button is pressed this function will execute
+# def test():
+#     print('Test')
 
 
 def screenshot():
@@ -88,36 +88,19 @@ output_label.grid(column=0, row=0)
 output_box.config(state=tk.DISABLED, relief='solid', font=('Calibri',40), justify=tk.CENTER, padding=50, background='light yellow')
 
 
-    
 
 # initializing buttons
-test_btn = ttk.Button(output_frame, width=30, text='Test', command=test, state=tk.DISABLED)
+# test_btn = ttk.Button(output_frame, width=30, text='Test', command=test, state=tk.DISABLED)
 browse_btn = ttk.Button(path_entry_frame, width=10, text='Browse', command=browse)
 screenshot_btn = ttk.Button(output_frame, width=30, text='Screenshot', command=screenshot)
 exit_btn = ttk.Button(output_frame, width=30, text='Exit', command=destructor)
 
 
 # button positioning
-test_btn.grid(column=0, row=5)
+# test_btn.grid(column=0, row=5)
 browse_btn.grid(column=1, row=1)
 screenshot_btn.grid(column=0, row=3)
 exit_btn.grid(column=0, row=6)
-
-# def update():
-#     # reads stream and returns true if read, and the frame data
-#     ret, frame = cap.read()
-#     # frame returned
-#     if ret:
-#         # covert the frame from bgr to rgba
-#         convert_to_rgba = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
-#         # convert from array to image and then to PhotoImage object for tkinter
-#         photo = ImageTk.PhotoImage(image=Image.fromarray(convert_to_rgba))
-#         # anchor the image (otherwise gets deleted by garbage collection)
-#         webcam.photo = photo
-#         # display the image on the canvas
-#         webcam.create_image(0, 0, image=photo, anchor='nw')
-#     # updates the canvas with a new frame every 30 miliseconds
-#     window.after(30, update)
 
 # once the porotocol for closing window is initiated a call back function is called
 window.protocol('WM_DELETE_WINDOW', destructor)
