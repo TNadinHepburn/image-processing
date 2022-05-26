@@ -52,13 +52,13 @@ def predictImage(ASL_model, filepath='asl_alphabet_test'):
     img_for_pred = ImageDataGenerator(preprocessing_function=tf.keras.applications.vgg16.preprocess_input).flow_from_directory(directory=data_dir, target_size=target_size, batch_size=1, shuffle=False)
     predictions = ASL_model.predict(img_for_pred, verbose=0)
     np.round(predictions)
+    all_labels = []
     count = 0
     pre_images = []
     all_img_path = []
     for img in glob.glob(data_dir + "/*/*.jpg"):
         pre_images.append(mpimg.imread(img))
         all_img_path.append(img)
-    all_labels = []
     for result in np.argmax(predictions, axis=-1):
         all_labels.append(labels[result])
         count += 1

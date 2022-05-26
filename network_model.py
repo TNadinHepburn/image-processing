@@ -30,7 +30,7 @@ def createModel():
         # dropout prevents overfitting by dropping 0.5 (50%) of the inputs to 0 and scaling remaining inputs accordingly
         # flatten reshapes the inputs in to one value 
         # performs the activation function (relu, softmax) with a bias 
-        # 
+        # modified from https://www.kaggle.com/code/dansbecker/running-kaggle-kernels-with-a-gpu
     model = Sequential()
     model.add(Conv2D(64, kernel_size=4, strides=1, activation='relu', input_shape=target_dims))
     model.add(Conv2D(64, kernel_size=4, strides=2, activation='relu'))

@@ -10,9 +10,9 @@ environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 def main(model): 
     option = "0"
     while option == "1" or option == "2" or option == "3" or option == "0":
-        print("Select option\n 1 Test Images   2 From Filepath   3 From Webcam   0 Quit")
+        print("Select option\n 1 Test Images   2 From Filepath   0 Quit")
         option = input("-->")
-        if option not in ["1","2","3","0"]:
+        if option not in ["1","2","0"]:
             print("Invalid Choice")
             continue
         else:
@@ -23,8 +23,6 @@ def main(model):
                 testImages(model)
             elif option == "2":
                 fileImages(model)
-            elif option == "3":
-                webcamImages(model)
 
 def testImages(model):
     img, outputs = predictImage(model)
@@ -37,15 +35,11 @@ def fileImages(model):
     img, outputs = predictImage(model,filepath)
     plotImages(img, outputs)
 
-def webcamImages():
-    print("Sorry this has not been implemented yet.\nPlease try another option!")
-    return
-    
 if __name__ == "__main__":
     train_now = ""
     if isfile('./asl_model.h5'):
-        train_now = input("A model has been pre-trained do you want to continue with this?\nY - to use pretrained model (default)\nN - Retrain model now\n-->")
-        if trainModel == "N":
+        train_now = input("A pre-trained model has been found do you want to use this?\nY - to use pretrained model (default)\nN - Retrain model now\n-->")
+        if train_now.upper() == "N":
             my_model = createModel()
             trainModel(my_model)
             saveModel(my_model)
